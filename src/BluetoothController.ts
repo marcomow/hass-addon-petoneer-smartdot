@@ -1,4 +1,4 @@
-const noble = require('@abandonware/noble');
+import noble from '@abandonware/noble';
 
 const serviceUuid = 'fff0';
 const commands = {
@@ -6,9 +6,12 @@ const commands = {
     preset_small: '0f0405000107',
     preset_medium: '0f0405000208',
     preset_large: '0f0405000309'
-}
+} as const;
+export type Command = keyof typeof commands;
 
-module.exports.BluetoothController = class BluetoothController {
+export class BluetoothController {
+    peripheral: noble.Peripheral | null = null;
+
     constructor() {
         this.initialize();
     }
@@ -29,7 +32,7 @@ module.exports.BluetoothController = class BluetoothController {
             }
         });
     }
-    async sendPresetCommand(command, stayConnected = false) {
+    async sendPresetCommand(command: Command, stayConnected: boolean = false): Promise<boolean> {
         return new Promise(async (resolve, reject) => {
             try {
                 if (!this.peripheral) {
@@ -37,9 +40,9 @@ module.exports.BluetoothController = class BluetoothController {
                     return;
                 }
                 noble.reset();
-                if (!this.peripheral.mtu) {
-                    await this.peripheral.connectAsync();
-                }
+                // if (!this.peripheral.mtu) {
+                //     await this.peripheral.connectAsync();
+                // }
                 const services = await this.peripheral.discoverServicesAsync([serviceUuid]);
                 const movementService = services[0];
                 const characteristics = await movementService.discoverCharacteristicsAsync(['fff3']);
@@ -56,7 +59,7 @@ module.exports.BluetoothController = class BluetoothController {
                 resolve(true);
             } catch (error) {
                 console.log(error)
-                await this.peripheral.disconnectAsync();
+                await this.peripheral?.disconnectAsync();
                 resolve(false);
             }
         });

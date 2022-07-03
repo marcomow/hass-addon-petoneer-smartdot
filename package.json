@@ -9,7 +9,12 @@
     "@abandonware/noble": "1.9.2-14"
   },
   "scripts": {
-    "start": "NODE_ENV=production node src/index.js"
+    "start": "ts-node src/index.ts"
   },
-  "repository": "https://github.com/marcomow/hass-addon-petoneer-smartdot.git"
+  "repository": "https://github.com/marcomow/hass-addon-petoneer-smartdot.git",
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "ts-node": "^10.8.2",
+    "typescript": "^4.7.4"
+  }
 }
