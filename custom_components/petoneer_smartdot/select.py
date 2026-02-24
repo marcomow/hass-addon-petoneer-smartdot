@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 
 from homeassistant.components import mqtt
 from homeassistant.components.select import SelectEntity
@@ -27,7 +28,6 @@ class SmartDotSelect(SelectEntity):
     """Representation of a Petoneer Smart Dot preset selector."""
 
     _attr_name = "Petoneer Smart Dot"
-    _attr_unique_id = "petoneer_smartdot_preset"
     _attr_options = PRESETS
     _attr_current_option = "stop"
     _attr_icon = "mdi:paw"
@@ -38,7 +38,9 @@ class SmartDotSelect(SelectEntity):
         self._config_entry = config_entry
         self._command_topic: str = config_entry.data[CONF_COMMAND_TOPIC]
         self._state_topic: str = config_entry.data[CONF_STATE_TOPIC]
-        self._unsubscribe = None
+        self._unsubscribe: Callable[[], None] | None = None
+        # Unique ID is scoped to the config entry so multiple devices can coexist.
+        self._attr_unique_id = f"{config_entry.entry_id}_preset"
 
     async def async_added_to_hass(self) -> None:
         """Subscribe to MQTT state topic when entity is added."""
@@ -62,8 +64,12 @@ class SmartDotSelect(SelectEntity):
             self._unsubscribe()
 
     async def async_select_option(self, option: str) -> None:
-        """Publish the selected preset command to MQTT."""
+        """Publish the selected preset command to MQTT.
+
+        State is intentionally NOT updated optimistically here.  The BLE bridge
+        publishes a confirmed state on the state topic only after a successful
+        write, so the entity state will be updated via the MQTT subscription
+        once the command has actually been executed.
+        """
         _LOGGER.debug("Publishing command '%s' to %s", option, self._command_topic)
         await mqtt.async_publish(self.hass, self._command_topic, option)
-        self._attr_current_option = option
-        self.async_write_ha_state()
