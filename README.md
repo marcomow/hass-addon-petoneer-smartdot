@@ -1,46 +1,62 @@
-# Home Assistant Petoneer Smart Dot Add-on
+# Petoneer Smart Dot – Home Assistant Integration
 
-An add-on to integrate [Petoneer Smart Dot](https://www.petoneer.com/playdot) with Home Assistant.
+A [HACS](https://hacs.xyz) custom integration that lets Home Assistant control
+the [Petoneer Smart Dot](https://www.petoneer.com/playdot) laser cat toy
+directly over Bluetooth – no MQTT broker, no bridge process, no extra
+dependencies.
 
-# Installation
-- Head to Supervisor => Add-on Store.
-- Click on the three dots on the top right, select Repositories.
-- Add this repository https://github.com/marcomow/hass-addons.
-- A new section should appear "marcomow Home Assistant add-on repo", click on "Petoneer Smart Dot controller", install.
+## Requirements
 
-# Setup
-## Input Select
-- Head to Configuration -> Helpers.
-- Create a new "Input Select".
-- Name it "Smartdot" and add the following options: stop, preset_small, preset_medium, preset_large. 
-## Automation
-- Head to Configuration -> Automations.
-- Add automation.
-- Click on the three dots on the top right, select Edit in YAML.
-- Copy-paste the following code.
-``` yaml
-alias: Smartdot Handler
-description: ''
-trigger:
-  - platform: state
-    entity_id: input_select.smartdot
-condition: []
-action:
-  - service: hassio.addon_stdin
-    data:
-      addon: 96fe3986_smartdot
-      input: '{{ states(''input_select.smartdot'') }}'
-mode: single
+* Home Assistant 2024.1 or newer (Bluetooth integration built-in).
+* A Bluetooth adapter accessible to the Home Assistant host.
+* [HACS](https://hacs.xyz) installed.
+
+---
+
+## Installation
+
+1. In HACS → **Integrations** → click the three-dot menu → **Custom repositories**.
+2. Add `https://github.com/marcomow/hass-addon-petoneer-smartdot` with category **Integration**.
+3. Search for **Petoneer Smart Dot** and install it.
+4. Restart Home Assistant.
+
+---
+
+## Setup
+
+Power on the Smart Dot so it advertises over Bluetooth.
+
+**Auto-discovery (recommended):** Home Assistant will detect the device
+automatically and show a notification to set it up. Click it and confirm.
+
+**Manual setup:** Go to **Settings → Devices & Services → Add Integration**,
+search for **Petoneer Smart Dot**, and select your device from the list.
+
+---
+
+## Entity
+
+A single `select` entity is created under the **Petoneer Smart Dot** device:
+
+| Entity | Options |
+|---|---|
+| `select.petoneer_smart_dot_preset` | `stop` · `preset_small` · `preset_medium` · `preset_large` |
+
+Selecting an option sends a stop command first (to safely park the motor),
+then the chosen preset.
+
+---
+
+## Lovelace
+
+```yaml
+type: entities
+entities:
+  - entity: select.petoneer_smart_dot_preset
 ```
-## Lovelace interface
-Add a new card by entity and select input_select.smartdot.
 
-Enjoy!
+---
 
-# Credits
-I learned how to reverse engineer a bluetooth device thanks to [@urish](https://github.com/urish)! 
-In particular I took inspiration from these articles:
-- [Reverse Engineering a Bluetooth Lightbulb](https://urish.medium.com/reverse-engineering-a-bluetooth-lightbulb-56580fcb7546)
-- [Start Building with Web Bluetooth and Progressive Web Apps](https://urish.medium.com/start-building-with-web-bluetooth-and-progressive-web-apps-6534835959a6)
+## Credits
 
-Without the open source code of [@balda](https://github.com/balda) I would never had properly setup the Dockerfile, I heavily took inspiration from [this repository](https://github.com/balda/ruuvitag-discovery).
+Bluetooth protocol reverse-engineered by [@urish](https://github.com/urish).

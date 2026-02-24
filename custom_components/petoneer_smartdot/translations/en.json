@@ -1,0 +1,17 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Petoneer Smart Dot",
+        "description": "Select the Petoneer Smart Dot device to set up. Make sure the device is powered on and nearby.",
+        "data": {
+          "address": "Device"
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "This device is already configured.",
+      "no_devices_found": "No Petoneer Smart Dot devices were found nearby. Make sure the device is powered on and in range."
+    }
+  }
+}
