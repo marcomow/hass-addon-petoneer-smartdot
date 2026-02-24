@@ -1,0 +1,14 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Petoneer Smart Dot",
+        "description": "Configure the MQTT topics used by the Petoneer Smart Dot Deno bridge.",
+        "data": {
+          "command_topic": "Command Topic",
+          "state_topic": "State Topic"
+        }
+      }
+    }
+  }
+}

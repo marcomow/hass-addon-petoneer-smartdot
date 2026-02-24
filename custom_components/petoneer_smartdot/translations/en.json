@@ -1,0 +1,18 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Petoneer Smart Dot",
+        "description": "Configure the MQTT topics used by the Petoneer Smart Dot Deno bridge. The bridge must be running separately (see README).",
+        "data": {
+          "command_topic": "Command Topic",
+          "state_topic": "State Topic"
+        },
+        "data_description": {
+          "command_topic": "MQTT topic the Deno bridge listens on for incoming commands (default: petoneer_smartdot/command).",
+          "state_topic": "MQTT topic the Deno bridge publishes the current state to (default: petoneer_smartdot/state)."
+        }
+      }
+    }
+  }
+}
