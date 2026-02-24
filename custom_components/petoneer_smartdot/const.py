@@ -2,10 +2,19 @@
 
 DOMAIN = "petoneer_smartdot"
 
-CONF_COMMAND_TOPIC = "command_topic"
-CONF_STATE_TOPIC = "state_topic"
+# BLE device advertisement name
+DEVICE_NAME = "PetCat"
 
-DEFAULT_COMMAND_TOPIC = "petoneer_smartdot/command"
-DEFAULT_STATE_TOPIC = "petoneer_smartdot/state"
+# BLE GATT service and characteristic UUIDs
+SERVICE_UUID = "fff0"
+CHARACTERISTIC_UUID = "fff3"
 
-PRESETS = ["stop", "preset_small", "preset_medium", "preset_large"]
+# Raw hex payloads for each preset command
+COMMANDS: dict[str, str] = {
+    "stop": "0f0407000008",
+    "preset_small": "0f0405000107",
+    "preset_medium": "0f0405000208",
+    "preset_large": "0f0405000309",
+}
+
+PRESETS = list(COMMANDS.keys())

@@ -3,12 +3,15 @@
     "step": {
       "user": {
         "title": "Petoneer Smart Dot",
-        "description": "Configure the MQTT topics used by the Petoneer Smart Dot Deno bridge.",
+        "description": "Select the Petoneer Smart Dot device to set up.",
         "data": {
-          "command_topic": "Command Topic",
-          "state_topic": "State Topic"
+          "address": "Device"
         }
       }
+    },
+    "abort": {
+      "already_configured": "[%key:common::config_flow::abort::already_configured_device%]",
+      "no_devices_found": "[%key:common::config_flow::abort::no_devices_found%]"
     }
   }
 }

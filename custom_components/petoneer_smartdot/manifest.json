@@ -1,11 +1,16 @@
 {
   "domain": "petoneer_smartdot",
   "name": "Petoneer Smart Dot",
+  "bluetooth": [
+    {
+      "local_name": "PetCat"
+    }
+  ],
   "codeowners": ["@marcomow"],
   "config_flow": true,
-  "dependencies": ["mqtt"],
+  "dependencies": ["bluetooth"],
   "documentation": "https://github.com/marcomow/hass-addon-petoneer-smartdot",
+  "integration_type": "device",
   "iot_class": "local_push",
-  "requirements": [],
   "version": "1.0.0"
 }
